@@ -32,8 +32,8 @@ fix f = f (fix f)
 fix' :: NestedFunc
 fix' = box fix
 
-self_fix :: NestedFunc
-self_fix = (unbox fix') fix'
+self_fix' :: NestedFunc
+self_fix' = (unbox fix') fix'
 
 self_apply :: NestedFunc -> NestedFunc
 self_apply f = (unbox f) f
@@ -64,3 +64,15 @@ ap f g x = (f x) (g x)
 
 ap' :: NestedFunc
 ap' = box ap
+
+zero' :: NestedFunc
+zero' = identity'
+
+plus_one :: (NestedFunc -> NestedFunc -> NestedFunc) -> (NestedFunc -> NestedFunc) -> NestedFunc -> NestedFunc
+plus_one n f x = f (n (box f) x)
+
+plus_one' :: NestedFunc
+plus_one' = box plus_one
+
+infinity' :: NestedFunc
+infinity' = (unbox fix') plus_one

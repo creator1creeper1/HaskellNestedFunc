@@ -73,3 +73,42 @@ deep_unbox'' = box . deep_unbox'
 
 deep_unbox''' :: NestedFunc
 deep_unbox''' = box deep_unbox''
+
+self_apply :: NestedFunc -> NestedFunc
+self_apply f = (unbox f) f
+
+self_apply' :: NestedFunc
+self_apply' = box self_apply
+
+apply_twice :: NestedFunc -> NestedFunc -> NestedFunc
+apply_twice f x = (unbox f) ((unbox f) x)
+
+apply_twice' :: NestedFunc
+apply_twice' = box (box . apply_twice)
+
+swap :: (NestedFunc -> NestedFunc -> NestedFunc) -> (NestedFunc -> NestedFunc -> NestedFunc)
+swap f x y = f y x
+
+swap' :: (NestedFunc -> NestedFunc) -> (NestedFunc -> NestedFunc)
+swap' f x = box (swap (unbox . f) x)
+
+swap'' :: NestedFunc
+swap'' = deep_box swap'
+
+constant :: NestedFunc -> NestedFunc -> NestedFunc
+constant x y = x
+
+constant' :: NestedFunc
+constant' = box (box . constant)
+
+ap :: (NestedFunc -> NestedFunc -> NestedFunc) -> (NestedFunc -> NestedFunc) -> NestedFunc -> NestedFunc
+ap f g x = (f x) (g x)
+
+ap' :: (NestedFunc -> NestedFunc) -> (NestedFunc -> NestedFunc) -> NestedFunc -> NestedFunc
+ap' f g x = ap (unbox . f) g x
+
+ap'' :: NestedFunc -> NestedFunc -> NestedFunc
+ap'' f g = box (ap' (unbox f) (unbox g))
+
+ap''' :: NestedFunc
+ap''' = box (box . ap'')

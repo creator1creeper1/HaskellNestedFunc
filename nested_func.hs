@@ -65,6 +65,15 @@ ap f g x = (f x) (g x)
 ap' :: NestedFunc
 ap' = box ap
 
+const_self :: NestedFunc -> NestedFunc
+const_self f = box const_self
+
+const_self' :: NestedFunc
+const_self' = box const_self
+
+const_self'' :: NestedFunc
+const_self'' = (unbox fix') constant'
+
 zero' :: NestedFunc
 zero' = identity'
 
